@@ -6,6 +6,7 @@
         <link href='public/assets/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
         <link href='public/assets/bootstrap/dist/css/bootstrap-theme.min.css' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
+        <link href='public/css/chromoselector.min.css' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="estilo.css">
     </head>
 
@@ -14,32 +15,47 @@
             <div class="container-fluid">
                 <br>
                 <div class="row">
-                    <div class="col-md-4"></div>
+                    <div class="col-md-8"></div>
                     <form id="form-triangulo-pascal">
+                        <div>
+                            <div class="col-md-8 col-md-offset-2 well" id="left-well">
 
-                        <div class="col-md-4 well" id="left-well">
+                                <div class="col-md-12">
+                                    <label for="num-filas">Número:</label>
+                                    <input type="number" min="6" max="2000" placeholder="Ingrese un número mayor a 5" id="num-filas" value="" autocomplete="off" class="form-control" required/>
+                                </div>
 
-                            <div class="col-md-12">
-                                <label for="num-filas">Número:</label>
-                                <input type="number" min="6" max="2000" placeholder="Ingrese un número mayor a 5" id="num-filas" value="" autocomplete="off" class="form-control" required/>
+                                <div class="col-md-6">
+                                    <br/>
+                                    <label for="color-izquierda">Color de la Izquierda:</label>
+                                    <input type="text" id="color-izquierda" value="#00ff00" autocomplete="off" class="form-control" required readonly="readonly"  />
+                                </div>
+                                <div class="col-md-6">
+                                    <br/>
+                                    <label for="color-derecha">Color de la Derecha:</label>
+                                    <input type="text" id="color-derecha" value="#0000ff" autocomplete="off" class="form-control" required readonly="readonly"  />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <br/>
+                                    <label><input type="radio" name="table-div" value="table" checked required> Table</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <br/>
+                                    <label><input type="radio" name="table-div" value="div" required> Div</label>
+                                </div>
+
+                                <hr>
+
+                                <div class="col-md-12">
+                                    <br/>
+                                    <div class="text-right">
+                                    <button class="btn btn-primary" type="submit">Crear Triángulo</button>
+                                    </div>
+                                </div>
+
                             </div>
-
-                            <div class="col-md-3">
-                                <br/>
-                                <label><input type="radio" name="table-div" value="table" checked required> Table</label>
-                            </div>
-                            <div class="col-md-6">
-                                <br/>
-                                <label><input type="radio" name="table-div" value="div" required> Div</label>
-                            </div>
-
-                            <hr>
-
-                            <br/><br/><br/><br/>
-                            <div class="text-right"><button class="btn btn-primary" type="submit">Crear Triángulo</button></div>
-
                         </div>
-
                     </form>
                 </div>
 
@@ -58,6 +74,7 @@
             <!-- Libraries Javascript codes -->
             <script src="public/assets/jquery/dist/jquery.min.js"></script>
             <script src="public/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+            <script src="public/js/libs/chromoselector.demo.min.js"></script>
 
             <!-- Custom Javascript Code -->
             <script src="public/js/app/main.js"></script>
@@ -70,6 +87,9 @@
                       evt.preventDefault();
                       iniciar();
                   });
+
+                  $('#color-izquierda').chromoselector();
+                  $('#color-derecha').chromoselector();
                 })();
 
                 function factorial(p) {
@@ -91,6 +111,34 @@
                   } else return;
                 }
 
+                function getBackground(m, n, valor){
+                    var colorIzquierda = $('#color-izquierda').val();
+                    var colorDerecha   = $('#color-derecha').val();
+                    var resultado      = "";
+                    if(valor){
+                        var fila = m+1;
+                        var columna = n+1;
+                        if(fila%2==0){
+                            resultado = "background-color: "+((columna<=(fila/2))?colorIzquierda:colorDerecha)+";";
+                        }
+                        else{
+                            if(columna<(fila/2)) {
+                                resultado = "background-color: "+colorIzquierda+";";
+                            }
+                            else{
+                                if((columna-0.5)==fila/2){
+                                    resultado = "background: linear-gradient(90deg, "+colorIzquierda+" 50%, "+colorDerecha+" 50%);";
+                                }
+                                else {
+                                    resultado = "background-color: "+colorDerecha+";";
+                                }
+                            }
+                        }
+                        // console.log("fila: "+fila, "columna: "+columna, "valor: "+valor, resultado);
+                    }
+                    return resultado;
+                }
+
                 function tabla(filas) {
                     var filas = parseInt(filas);
                     var texto = "<table border='3' cellspacing='3' class='table-bordered'";
@@ -100,6 +148,7 @@
                     var posicion = Math.ceil(filas/2)-1;
                     var columnaActual = 1;
                     var casillasVacias = "";
+                    var background = "";
                     var m = 0, n = 0;
                     for (m = 0; m < filas; m++) {
                         texto += "\t<tr>\n";
@@ -110,8 +159,10 @@
                             }
                             texto += "\t\t<td";
                             if (n <= m) {
-                                texto += " style='border:1px solid black; padding:5px'>";
+                                // background = "background: linear-gradient(90deg, #FFC0CB 50%, #00FFFF 50%);";
                                 valor = combinaciones(m, n);
+                                background = getBackground(m, n, valor);
+                                texto += " style=' "+background+" border:1px solid black; padding:5px'>";
                                 texto += valor;
                             }
                             else{
@@ -131,8 +182,6 @@
                     }
                     texto += '</table>\n<div class="leftcover"></div><div class="rightcover"></div>';
 
-                    console.log(texto);
-
                     $("#triangulo-pascal").html(texto);
 
                     $("#div-triangulo-container").removeClass("hide");
@@ -144,6 +193,7 @@
                     var texto = "";
                     var valor = 0;
                     var resultados = [];
+                    var background = "";
                     var posicion = Math.ceil(filas/2)-1;
                     var columnaActual = 1;
                     for (m = 0; m < filas; m++) {
@@ -157,8 +207,9 @@
                             }
                             texto += "\t\t<span";
                             if (n <= m) {
-                                texto += " style='min-width: 25px; border:1px solid black; padding-right:5px; padding-left:5px;'>";
                                 valor = combinaciones(m, n);
+                                background = getBackground(m, n, valor);
+                                texto += " style='"+background+" min-width: 25px; border:1px solid black; padding-right:5px; padding-left:5px;'>";
                                 texto += valor;
                             }
                             else{
@@ -175,8 +226,6 @@
                     }
                     texto += '\n<div class="leftcover"></div><div class="rightcover"></div>';
 
-                    console.log(texto);
-
                     $("#triangulo-pascal").html(texto);
 
                     $("#div-triangulo-container").removeClass("hide");
@@ -188,6 +237,9 @@
 
                     var filas = $('#num-filas').val();
 
+                    var colorIzquierda = $('#color-izquierda').val();
+                    var colorDerecha   = $('#color-derecha').val();
+
                     if(filas != parseInt(filas)){
                         $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><strong>Error!</strong> </button>El dato ingresado no es un número.</div>');
                         $("#div-triangulo-container").removeClass("hide");
@@ -195,6 +247,11 @@
                     }
                     else if (parseInt(filas)<=5) {
                         $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> El número que ingrese debe ser mayor a 5.</div>');
+                        $("#div-triangulo-container").removeClass("hide");
+                        return false;
+                    }
+                    else if (colorIzquierda==colorDerecha) {
+                        $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> Ha escogido el mismo color para ambos casos, debe escoger colores distintos.</div>');
                         $("#div-triangulo-container").removeClass("hide");
                         return false;
                     }
