@@ -2,22 +2,14 @@
 h1 {
     font-family: 'Berkshire Swash', cursive;
     font-size: 60px;
-    color:#2196f3;
+    color:#265a88;
     text-align: center;
 }
 
 h2{
-  font-family: 'Berkshire Swash', cursive;  
+  font-family: 'Berkshire Swash', cursive;
 }
 
-$(document).ready(function(){
-    $("#triangulo").click(function(){
-
-    });
-});
-
-if ($("#triangulo").attr("checked")){
-   $("#formulariotriangulo").css("display", "radio");
-}else{
-   $("#formulariotriangulo").css("display", "none");
+.hide{
+    display: none;
 }
