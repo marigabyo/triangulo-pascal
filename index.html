@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="utf-8">
+<head>
+<title>Triangulo</title>
+    <link href='public/assets/bootstrap/dist/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <link href='public/assets/bootstrap/dist/css/bootstrap-theme.min.css' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../triangulo/estilo.css">
+    <!-- aqui pondremos el contenido html -->
+</head>
+
+<body>
+<h1>Crea un triangulo de Pascal</h1> 
+    <div class="container-fluid">
+        <br>
+        <div class="row">
+             <div class="col-md-4"></div>
+             
+             <div class="col-md-4 well" id="left-well">Número:<input type="text" placeholder="Solo número" id="num_filas" value=""/>
+             <h2>Triángulo de Pascal</h2>
+             <div class="row" id="triangulo"></div>
+
+             <label><input type="radio" name="table-div" checked>Table</label>
+
+             <label><input type="radio" name="table-div" checked>Div</label>
+             <br>
+             <div id="formulariotriangulo" style="display: none;">
+                 
+             </div>
+             <input type="button" onclick="iniciar()" value="Crear"/> </div>
+                
+                
+        </div>
+    </div>
+
+           <div id="contadortemporal"></div>
+
+<!-- función de piramide de pascal con table-->
+<script>
+function factorial(p) {
+    f = 1;
+    for (i = 1; i <= p; i++) {
+        f *= i;
+    }
+    return f;
+}
+
+function combinaciones(m, n) {
+    if (n <= m) {
+        var dividendo1 = factorial(m);
+        var divisor1 = factorial(m - n);
+        var divisor = factorial(n);
+        var dividendo = dividendo1 / divisor1;
+        var combinacion = Math.round(dividendo / divisor);
+        return combinacion;
+    } else return;
+}
+
+function tabla(filas) {
+    var start = new Date().getTime();
+    var filas = parseInt(filas);
+    var texto = "<table border='3' cellspacing='3'";
+    texto += " style='font-size:20px;font-family:verdana'>";
+    var valor = 0;
+    var resultados = [];
+    texto += "<tr>";
+    for (i = -1; i < filas; i++) {
+        if (i == -1) texto += "<td></td>";
+        else texto += "<td>N:" + i + "</td>";
+    }
+    texto += "</tr>";
+    for (m = 0; m < filas; m++) {
+        texto += "<tr>";
+        for (n = 0; n < filas; n++) {
+            if (n === 0) texto += "<td>M:" + m + "</td>";
+            texto += "<td style='width:25;";
+            texto += "text-align:right;border:3px solid black;padding:5px'>";
+            if (n <= m) {
+                valor = combinaciones(m, n);
+                texto += valor;
+            } else texto += "";
+            texto += "</td>";
+        }
+        texto += "</tr>";
+    }
+    texto += "</table>";
+    document.getElementById('triangulo').innerHTML = texto;
+    var finish = new Date().getTime();
+    var tiempoEmpleado = finish - start;
+    var textoTiempo = "Tiemplo empleado en el cálculo: <b>" + tiempoEmpleado + " ms</b>";
+    document.getElementById('contadortemporal').innerHTML = textoTiempo;
+}
+
+function iniciar(){
+    var filas = document.getElementById('num_filas').value;
+    console.log(filas);
+    return tabla(filas);    
+}
+
+
+</script>   
+ <!-- Libraries Javascript codes -->
+    <script src="public/assets/jquery/dist/jquery.min.js"></script>
+    <script src="public/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="public/js/libs/jquery.slides.js"></script>
+
+    <!-- Custom Javascript Code -->
+    <script src="public/js/app/main.js"></script>
+   
+     
+</body>
+</html>

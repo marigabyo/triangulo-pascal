@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="utf-8">
+<head>
+<title>Triangulo</title>
+
+</head>
+
+<body>
+
+<p>Escriba el número de filas del triángulo:</p>
+<p><input type="text" id="num_filas" value="" /> <input type="button" onclick="iniciar()" value="Escribe tabla" /></p>
+<hr />
+Triángulo de Pascal
+<div id="triangulo"></div>
+<hr />
+<div id="contadortemporal"></div>
+<script>
+function factorial(p) {
+    f = 1;
+    for (i = 1; i <= p; i++) {
+        f *= i;
+    }
+    return f;
+}
+
+function combinaciones(m, n) {
+    if (n <= m) {
+        var dividendo1 = factorial(m);
+        var divisor1 = factorial(m - n);
+        var divisor = factorial(n);
+        var dividendo = dividendo1 / divisor1;
+        var combinacion = Math.round(dividendo / divisor);
+        return combinacion;
+    } else return;
+}
+
+function tabla(filas) {
+    var start = new Date().getTime();
+    var filas = parseInt(filas);
+    var texto = "<table border='0' cellspacing='3'";
+    texto += " style='font-size:11px;font-family:verdana'>";
+    var valor = 0;
+    var resultados = [];
+    texto += "<tr>";
+    for (i = -1; i < filas; i++) {
+        if (i == -1) texto += "<td></td>";
+        else texto += "<td>N:" + i + "</td>";
+    }
+    texto += "</tr>";
+    for (m = 0; m < filas; m++) {
+        texto += "<tr>";
+        for (n = 0; n < filas; n++) {
+            if (n === 0) texto += "<td>M:" + m + "</td>";
+            texto += "<td style='width:25;";
+            texto += "text-align:right;border:1px solid grey;padding:5px'>";
+            if (n <= m) {
+                valor = combinaciones(m, n);
+                texto += valor;
+            } else texto += "";
+            texto += "</td>";
+        }
+        texto += "</tr>";
+    }
+    texto += "</table>";
+    document.getElementById('triangulo').innerHTML = texto;
+    var finish = new Date().getTime();
+    var tiempoEmpleado = finish - start;
+    var textoTiempo = "Tiemplo empleado en el cálculo: <b>" + tiempoEmpleado + " ms</b>";
+    document.getElementById('contadortemporal').innerHTML = textoTiempo;
+}
+
+function iniciar(){
+    var filas = document.getElementById('num_filas').value;
+    console.log(filas);
+    return tabla(filas);    
+}
+
+
+</script>
+</body>
+</html>
