@@ -13,3 +13,40 @@ h2{
 .hide{
     display: none;
 }
+
+td{
+    display:inline-block;
+    padding:5px;
+    border-left:1px solid #fff;
+}
+tr{
+    text-align:center;
+}
+tr td:last-child{
+    padding-right:20px;
+}
+tr td:first-child{
+    padding-left:20px;
+    border-left:none;
+}
+div{
+    position:relative;
+}
+.leftcover{
+    position:absolute;
+    content:"";
+    width: 0;
+    height: 0;
+    border-top: 100px solid white;
+    border-right: 100px solid transparent;
+    top:0;
+}
+.rightcover{
+    position:absolute;
+    content:"";
+    width: 0;
+    height: 0;
+    border-top: 100px solid white;
+    border-left: 100px solid transparent;
+    top:0;
+}

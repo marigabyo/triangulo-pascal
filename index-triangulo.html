@@ -97,12 +97,18 @@
                     texto += " style='font-size:20px;font-family:verdana'>";
                     var valor = 0;
                     var resultados = [];
-                    var posicion = Math.ceil(filas/2);
-                    var columnaActual = 0;
+                    var posicion = Math.ceil(filas/2)-1;
+                    var columnaActual = 1;
+                    var casillasVacias = "";
+                    var m = 0, n = 0;
                     for (m = 0; m < filas; m++) {
-                        texto += "<tr>";
+                        texto += "\t<tr>\n";
+                        texto += "\t\t<equilibrio-"+m+">\n";
                         for (n = 0; n < filas; n++) {
-                            texto += "<td";
+                            if(posicion+n==filas){
+                                break;
+                            }
+                            texto += "\t\t<td";
                             if (n <= m) {
                                 texto += " style='border:1px solid black; padding:5px'>";
                                 valor = combinaciones(m, n);
@@ -111,12 +117,22 @@
                             else{
                                 texto += ">";
                                 texto += "";
+                                casillasVacias += "<td> </td>\n";
                             }
-                            texto += "</td>";
+                            columnaActual = n+1;
+                            texto += " </td>\n";
                         }
-                        texto += "</tr>";
+                        if(posicion>=1){
+                            posicion -= 1;
+                        }
+                        texto = texto.replace("<equilibrio-"+m+">", casillasVacias);
+                        console.log(casillasVacias, "<equilibrio-"+m+">");
+                        casillasVacias = "";
+                        texto += "\t</tr>\n";
                     }
-                    texto += '</table>';
+                    texto += '</table>\n<div class="leftcover"></div><div class="rightcover"></div>';
+
+                    console.log(texto);
 
                     $("#triangulo-pascal").html(texto);
 
@@ -124,21 +140,77 @@
 
                 }
 
+                function div(filas) {
+                    var filas = parseInt(filas);
+                    var texto = "";
+                    var valor = 0;
+                    var resultados = [];
+                    var posicion = Math.ceil(filas/2)-1;
+                    var columnaActual = 1;
+                    for (m = 0; m < filas; m++) {
+                        texto += "\t<div>\n";
+                        for (var x=0; x<posicion; x++) {
+                            texto += "\t\t<span> </span>\n";
+                        }
+                        for (n = 0; n < filas; n++) {
+                            if(posicion+n==filas){
+                                break;
+                            }
+                            texto += "\t\t<span";
+                            if (n <= m) {
+                                texto += " style='min-width: 25px; border:1px solid black; padding-right:5px; padding-left:5px;'>";
+                                valor = combinaciones(m, n);
+                                texto += valor;
+                            }
+                            else{
+                                texto += ">";
+                                texto += "";
+                            }
+                            columnaActual = n+1;
+                            texto += "</span>\n";
+                        }
+                        if(posicion>=1){
+                            posicion -= 1;
+                        }
+                        texto += "\t</div>\n";
+                    }
+                    texto += '\n<div class="leftcover"></div><div class="rightcover"></div>';
+
+                    console.log(texto);
+
+                    $("#triangulo-pascal").html(texto);
+
+                    $("#div-triangulo-container").removeClass("hide");
+
+                }
+
+
                 function iniciar(){
 
-                  var filas = $('#num-filas').val();
+                    var filas = $('#num-filas').val();
 
-                  if(filas != parseInt(filas)){
-                      $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><strong>Error!</strong> </button>El dato ingresado no es un número.</div>');
-                      $("#div-triangulo-container").removeClass("hide");
-                      return false;
-                  }
-                  else if (parseInt(filas)<=5) {
-                      $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> El número que ingrese debe ser mayor a 5.</div>');
-                      $("#div-triangulo-container").removeClass("hide");
-                      return false;
-                  }
-                  return tabla(filas);
+                    if(filas != parseInt(filas)){
+                        $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span><strong>Error!</strong> </button>El dato ingresado no es un número.</div>');
+                        $("#div-triangulo-container").removeClass("hide");
+                        return false;
+                    }
+                    else if (parseInt(filas)<=5) {
+                        $("#triangulo-pascal").html('<div class="alert alert-danger" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Error!</strong> El número que ingrese debe ser mayor a 5.</div>');
+                        $("#div-triangulo-container").removeClass("hide");
+                        return false;
+                    }
+
+                    var tipo = "";
+                    var tipoSelected = $("input[type='radio'][name='table-div']:checked");
+                    if (tipoSelected.length > 0) {
+                        tipo = tipoSelected.val();
+                    }
+                    if(tipo=='table'){
+                        return tabla(filas);
+                    }
+                    else{
+                        return div(filas);
+                    }
                 }
 
             </script>
